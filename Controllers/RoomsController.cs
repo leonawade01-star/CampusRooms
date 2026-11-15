@@ -47,6 +47,15 @@ namespace CampusRooms.Controllers
             return View(room);
         }
 
+        [HttpGet("rooms/seats/{min_seats:int}")]
+        public IActionResult BigRooms(int min_seats)
+        {
+            List<Room> rooms = _db.Rooms.FromSql($"SELECT * FROM Rooms WHERE Seats >= {min_seats}").Include(each_room => each_room.Building).OrderByDescending(each_room => each_room.Seats).ToList();
+            ViewData["Title"] = $"Rooms with at least" + min_seats + "seats";
+            ViewBag.MinSeats = min_seats;
+            return View("BigRooms", rooms);
+        }
+
         // GET /rooms/add: an empty form
         [HttpGet("rooms/add")]
         public IActionResult Add()

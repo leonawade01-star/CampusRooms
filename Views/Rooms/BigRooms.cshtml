@@ -1,0 +1,22 @@
+﻿@model List<Room>
+
+<h1>Rooms with at least @ViewBag.MinSeats seats</h1>
+<p>@Model.Count rooms</p>
+
+
+<table class="table">
+    <tr>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Seats</th>
+        <th>Building</th>
+        <th>Projector</th>
+        <th></th>
+    </tr>
+    @foreach (Room each_room in Model)
+    {
+        <partial name="_RoomRow" model="each_room" />
+    }
+</table>
+
+<a asp-controller="Rooms" asp-action="Index">All rooms</a>
