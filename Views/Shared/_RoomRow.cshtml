@@ -4,6 +4,7 @@
     <td><a asp-controller="Rooms" asp-action="Details" asp-route-id="@Model.Id">@Model.Code</a></td>
     <td>@Model.Name</td>
     <td>@Model.Seats</td>
+    <td><a asp-controller="Buildings" asp-action="Details" asp-route-id="@Model.BuildingId">@Model.Building?.Name</a></td>
     <td>
         @if (Model.HasProjector)
         {

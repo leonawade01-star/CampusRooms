@@ -1,7 +1,10 @@
-using CampusRooms.Data;
-using CampusRooms.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using CampusRooms.Data;
+using CampusRooms.Models;
+
 
 namespace CampusRooms.Controllers
 {
@@ -15,12 +18,18 @@ namespace CampusRooms.Controllers
             _db = db;
         }
 
+        private void LoadBuildings()
+        {
+            List<Building> buildings = _db.Buildings.OrderBy(building => building.Name).ToList();
+            ViewBag.Buildings = new SelectList(buildings, "Id", "Name");
+        }
+
         // GET /rooms: every room, sorted by code
         [HttpGet("rooms")]
         public IActionResult Index()
         {
             ViewData["Title"] = "Rooms";
-            List<Room> rooms = _db.Rooms.OrderBy(room => room.Code).ToList();
+            List<Room> rooms = _db.Rooms.Include(each_room => each_room.Building).OrderBy(each_room => each_room.Code).ToList();
             ViewBag.Count = rooms.Count;
             return View(rooms);
         }
@@ -29,7 +38,7 @@ namespace CampusRooms.Controllers
         [HttpGet("rooms/{id:int}")]
         public IActionResult Details(int id)
         {
-            Room? room = _db.Rooms.Find(id);
+            Room? room = _db.Rooms.Include(each_room => each_room.Building).FirstOrDefault(each_room => each_room.Id == id);
             if (room == null)
             {
                 return NotFound();
@@ -43,6 +52,7 @@ namespace CampusRooms.Controllers
         public IActionResult Add()
         {
             ViewData["Title"] = "Add a room";
+            LoadBuildings();
             return View(new Room());
         }
 
@@ -54,6 +64,7 @@ namespace CampusRooms.Controllers
             if (!ModelState.IsValid)
             {
                 ViewData["Title"] = "Add a room";
+                LoadBuildings();
                 return View(new_room);
             }
 
@@ -84,6 +95,7 @@ namespace CampusRooms.Controllers
                 return NotFound();
             }
             ViewData["Title"] = "Edit a room";
+            LoadBuildings();
             return View(room);
         }
 
@@ -95,6 +107,7 @@ namespace CampusRooms.Controllers
             if (!ModelState.IsValid)
             {
                 ViewData["Title"] = "Edit a room";
+                LoadBuildings();
                 return View(changed_room);
             }
 
