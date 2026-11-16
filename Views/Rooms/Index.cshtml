@@ -3,7 +3,10 @@
 <h1>Rooms</h1>
 <p>@ViewBag.Count rooms</p>
 
-<p><a class="btn btn-primary" asp-controller="Rooms" asp-action="Add">Add a room</a></p>
+@if (User.IsInRole("Admin") || User.IsInRole("Staff"))
+{
+    <a class="btn btn-primary mb-3" asp-controller="Rooms" asp-action="Add">Add a room</a>
+}
 
 <table class="table">
     <tr>

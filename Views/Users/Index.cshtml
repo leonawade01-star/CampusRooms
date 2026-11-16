@@ -1,0 +1,29 @@
+﻿@model List<Microsoft.AspNetCore.Identity.IdentityUser>
+
+<h1>Users</h1>
+
+<table class="table">
+    <tr>
+        <th>Email</th>
+        <th></th>
+    </tr>
+    @foreach (Microsoft.AspNetCore.Identity.IdentityUser each_user in Model)
+    {
+        <tr>
+            <td>@each_user.Email</td>
+            <td>
+                @if (ViewBag.StaffIds.Contains(each_user.Id))
+                {
+                    <span class="badge bg-primary">Staff</span>
+                }
+                else
+                {
+                    @* Changes data, so a POST form with a button, never a link *@
+                    <form method="post" asp-controller="Users" asp-action="MakeStaff" asp-route-id="@each_user.Id">
+                        <button type="submit" class="btn btn-sm btn-outline-primary">Make staff</button>
+                    </form>
+                }
+            </td>
+        </tr>
+    }
+</table>

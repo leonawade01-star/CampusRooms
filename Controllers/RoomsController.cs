@@ -57,6 +57,7 @@ namespace CampusRooms.Controllers
         }
 
         // GET /rooms/add: an empty form
+        [Authorize(Policy = "CanManageRooms")]
         [HttpGet("rooms/add")]
         public IActionResult Add()
         {
@@ -66,6 +67,7 @@ namespace CampusRooms.Controllers
         }
 
         // POST /rooms/add: save the new room, or show the form again with the messages
+        [Authorize(Policy = "CanManageRooms")]
         [HttpPost("rooms/add")]
         [ValidateAntiForgeryToken]
         public IActionResult Add(Room new_room)
@@ -95,6 +97,7 @@ namespace CampusRooms.Controllers
         }
 
         // GET /rooms/edit/2: the form, filled in. /rooms/edit/99 is a 404.
+        [Authorize(Policy = "CanManageRooms")]
         [HttpGet("rooms/edit/{id:int}")]
         public IActionResult Edit(int id)
         {
@@ -109,6 +112,7 @@ namespace CampusRooms.Controllers
         }
 
         // POST /rooms/edit/2: save the changes to the same row
+        [Authorize(Policy = "CanManageRooms")]
         [HttpPost("rooms/edit/{id:int}")]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Room changed_room)
@@ -147,6 +151,7 @@ namespace CampusRooms.Controllers
         }
 
         // GET /rooms/delete/2: ask first. Nothing is deleted yet.
+        [Authorize(Roles = "Admin")]
         [HttpGet("rooms/delete/{id:int}")]
         public IActionResult Delete(int id)
         {
@@ -160,6 +165,7 @@ namespace CampusRooms.Controllers
         }
 
         // POST /rooms/delete/2: the Yes button. Now the row goes.
+        [Authorize(Roles = "Admin")]
         [HttpPost("rooms/delete/{id:int}")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
